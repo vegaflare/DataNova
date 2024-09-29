@@ -1,9 +1,6 @@
 package com.vegaflare;
 
-import com.uc4.api.SearchResultItem;
-import com.uc4.api.UC4ObjectName;
 import com.uc4.api.objects.CustomAttribute;
-import com.uc4.api.objects.Job;
 import com.uc4.api.objects.UC4Object;
 import com.uc4.communication.Connection;
 import com.uc4.communication.ConnectionAttributes;
@@ -11,8 +8,6 @@ import com.uc4.communication.requests.*;
 import com.vegaflare.utils.Logger;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Objects;
 
 public class AutomicInt {
 
@@ -55,25 +50,32 @@ public class AutomicInt {
 
     }
 
+public void deactivateTasks(int[] tasks) throws IOException {
+       DeactivateTask dt = new DeactivateTask(tasks,true);
+       Logger.logInfo("Deactivating "+tasks.length +" tasks.");
+       uc4.sendRequestAndWait(dt);
 
+       if(dt.getMessageBox()!= null){
+           Logger.logError(dt.getMessageBox().getText());
+           failCounter++;
+       } else {
+           Logger.logInfo("Tasks deactivated successfully.");
+       }
+}
 
+    public void cancelTasks(int[] tasks) throws IOException {
+        CancelTask cancel= new CancelTask(tasks,true);
+        Logger.logInfo("Cancelling "+tasks.length +" tasks.");
+        uc4.sendRequestAndWait(cancel);
 
-
-
-
-
-    public boolean saveObject(UC4Object obj) throws IOException {
-        SaveObject save = new SaveObject(obj);
-        uc4.sendRequestAndWait(save);
-        //Test if save was successful
-        if (save.getMessageBox() != null) {
-            Logger.logError(save.getMessageBox().getText());
+        if(cancel.getMessageBox()!= null){
+            Logger.logError(cancel.getMessageBox().getText());
             failCounter++;
-            return false;
         } else {
-            return true;
+            Logger.logInfo("Tasks cancelled successfully.");
         }
     }
+
 
 }
 
