@@ -30,6 +30,9 @@ public class Initializer {
     private String DBPwd;
     private String DBUser;
     private DBItg db;
+    private String archiveKey;
+
+    public String getArchiveKey(){return archiveKey;}
 
     public DBItg getDBItg() {
         return db;
@@ -80,7 +83,10 @@ public class Initializer {
 
     public String getJDBCUrl() {return JDBCUrl;}
 
-    public Initializer(String[] args) throws InvalidFileFormatException, IOException, SQLException, ClassNotFoundException {
+
+
+
+    public Initializer(String[] args) throws Exception {
 
 
         try {
@@ -107,7 +113,7 @@ public class Initializer {
         JDBCUrl = ini.get("JDBC", "connString");
 
 
-        // Initialize connections to UC4
+//         Initialize connections to UC4
         automicInt = new AutomicInt(uc4Host, uc4Port, uc4User, uc4Dept, uc4Pwd, uc4Client);
         db  = new DBItg(DBUser, DBPwd, JDBCUrl);
 
@@ -145,6 +151,8 @@ public class Initializer {
                 case "-status" : this.status = args[i+1];
                     break;
                 case "-d" : this.keepDays = Integer.parseInt(args[i+1]);
+                    break;
+                case "-key" : archiveKey =  args[i+1];
                     break;
             }
         }
