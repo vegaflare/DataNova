@@ -152,7 +152,7 @@ public class Initializer {
                     break;
                 case "-d" : this.keepDays = Integer.parseInt(args[i+1]);
                     break;
-                case "-key" : archiveKey =  args[i+1];
+                case "-key" : archiveKey =  args[i+1].equals("%")? "*": args[i+1];
                     break;
             }
         }
@@ -170,7 +170,11 @@ public class Initializer {
             }
         }else{
             printParamDef();
-            throw new InvalidParameterException("Invalid number of arguments provided.");
+            for( int i=0; i < args.length; i++)
+                    System.out.println("\n"+args[i]);
+            throw new InvalidParameterException("Invalid number of arguments provided."+ args.length);
+
+
 
         }
     }
