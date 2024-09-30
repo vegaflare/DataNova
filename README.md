@@ -15,3 +15,12 @@
 -- added support for only few job statuses, not because of any issues/limitations just because I'm lazy(kind of a limitation?)
 
 -- I believe cancelled tasks should be deactivated as well, any disagreements?
+
+
+### example
+C:\temp>java -jar DataNova.jar -key % -d 20 -DBUser uc4 -DBPwd 1234
+2024-09-30 10:42:16.864:INFO::main: Logging initialized @302ms to org.eclipse.jetty.util.log.StdErrLog
+[INFO] 30092024/104218 : Connected to AE at :'14->UC4#CP002' successfully.
+[INFO] 30092024/104218 : Connected to DB
+[INFO] 30092024/104218 : Deactivating 993 tasks.
+[INFO] 30092024/104225 : Tasks deactivated successfully.
