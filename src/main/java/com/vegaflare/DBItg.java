@@ -49,9 +49,9 @@ public class DBItg {
             ++i;
         }
 
-        System.out.println("Number of iterations: "+i);
-        System.out.println("First: "+runs[0]);
-        System.out.println("Last: "+runs[size-1]);
+//        System.out.println("Number of iterations: "+i);
+//        System.out.println("First: "+runs[0]);
+//        System.out.println("Last: "+runs[size-1]);
         return runs;
     }
 

@@ -182,7 +182,7 @@ public class Initializer {
         System.out.println("   -DBPwd <pwd>");
         System.out.println("   -d <number of days>");
         System.out.println("   -key <ArchiveKey1 value to look for>");
-        System.out.println("   *status: can be 'ENDED_OK'(default), 'ENDED_NOT_OK', 'ANY_OK', 'ANY_ABEND'");
+        System.out.println("   *status: can be 'ENDED_OK'(default), 'ENDED_NOT_OK', 'ANY_OK', 'ANY_ABEND', 'BLOCKED'");
         System.out.println("   *operation: can be 'D' - deactivate(default), 'C' - cancel");
     }
 

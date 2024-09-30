@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DataNova:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DataNova_jar</output-path>
+    <root id="archive" name="DataNova.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="DataNova" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/uc4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/postgresql-42.7.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ini4j/ini4j/0.5.4/ini4j-0.5.4.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
