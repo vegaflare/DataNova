@@ -152,7 +152,7 @@ public class Initializer {
                     break;
                 case "-d" : this.keepDays = Integer.parseInt(args[i+1]);
                     break;
-                case "-key" : archiveKey =  args[i+1];
+                case "-key" : archiveKey =  args[i+1].equals("%")? "*": args[i+1];
                     break;
             }
         }
@@ -170,7 +170,11 @@ public class Initializer {
             }
         }else{
             printParamDef();
-            throw new InvalidParameterException("Invalid number of arguments provided.");
+            for( int i=0; i < args.length; i++)
+                    System.out.println("\n"+args[i]);
+            throw new InvalidParameterException("Invalid number of arguments provided."+ args.length);
+
+
 
         }
     }
@@ -182,7 +186,7 @@ public class Initializer {
         System.out.println("   -DBPwd <pwd>");
         System.out.println("   -d <number of days>");
         System.out.println("   -key <ArchiveKey1 value to look for>");
-        System.out.println("   *status: can be 'ENDED_OK'(default), 'ENDED_NOT_OK', 'ANY_OK', 'ANY_ABEND'");
+        System.out.println("   *status: can be 'ENDED_OK'(default), 'ENDED_NOT_OK', 'ANY_OK', 'ANY_ABEND', 'BLOCKED'");
         System.out.println("   *operation: can be 'D' - deactivate(default), 'C' - cancel");
     }
 

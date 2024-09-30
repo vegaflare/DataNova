@@ -1,6 +1,7 @@
 package com.vegaflare;
 
 import com.vegaflare.utils.Initializer;
+import com.vegaflare.utils.Logger;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -16,10 +17,14 @@ public class Main {
                 init.getUc4Client());
         int[] tasks = DBItg.getRunIDs(init.getDBItg().runStatement(query));
 
-        // check if conditions valid for cancel, deactivation is a must either way
-        if(init.getOperation().equals("C") && init.getStatus().equals("BLOCKED"))
-            init.getAutomicInt().cancelTasks(tasks);
-        init.getAutomicInt().deactivateTasks(tasks);
+        if(tasks.length != 0) {
+            // check if conditions valid for cancel, deactivation is a must either way
+            if (init.getOperation().equals("C") && init.getStatus().equals("BLOCKED"))
+                init.getAutomicInt().cancelTasks(tasks);
+            init.getAutomicInt().deactivateTasks(tasks);
+        }else{
+            Logger.logInfo("Query returned zero results");
+        }
         init.close();
     }
 }
