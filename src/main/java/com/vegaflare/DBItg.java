@@ -24,18 +24,17 @@ public class DBItg {
         if(this.connection.isValid(20)){
             Logger.logInfo("Connected to DB");
         }
-        //String query = getQuery(0, "*", "ANY_ABEND", "postgres", 7);
-        //System.out.println(query);
-        //ResultSet rs = runStatement(query);
-        //int[] runNumbers = getRunIDs(rs);
     }
+
+
     public ResultSet runStatement(String query) throws SQLException {
         Statement statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         //        while (resultSet.next()) {
 //            System.out.println(resultSet.getArray(1)+" : "+ resultSet.getArray(2));
 //        }
-
-        return statement.executeQuery(query);
+        ResultSet rs = statement.executeQuery(query);
+        connection.close();
+        return rs;
     }
 
     // returns an arrays with the matching runids

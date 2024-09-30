@@ -16,11 +16,10 @@ public class Main {
                 init.getUc4Client());
         int[] tasks = DBItg.getRunIDs(init.getDBItg().runStatement(query));
 
-        // check if conditions valid for cancel or deactivation
+        // check if conditions valid for cancel, deactivation is a must either way
         if(init.getOperation().equals("C") && init.getStatus().equals("BLOCKED"))
             init.getAutomicInt().cancelTasks(tasks);
-        else
-            init.getAutomicInt().deactivateTasks(tasks);
+        init.getAutomicInt().deactivateTasks(tasks);
         init.close();
     }
 }
