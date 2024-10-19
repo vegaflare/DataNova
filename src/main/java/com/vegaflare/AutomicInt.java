@@ -13,8 +13,6 @@ public class AutomicInt {
 
     private Connection uc4;
     private boolean isLoginSuccessful;
-    private int failCounter;
-    private CustomAttribute refCA;
 
     public boolean isLoginSuccessful() {
         return isLoginSuccessful;
@@ -57,7 +55,6 @@ public void deactivateTasks(int[] tasks) throws IOException {
 
        if(dt.getMessageBox()!= null){
            Logger.logError(dt.getMessageBox().getText());
-           failCounter++;
        } else {
            Logger.logInfo("Tasks deactivated successfully.");
        }
@@ -70,7 +67,6 @@ public void deactivateTasks(int[] tasks) throws IOException {
 
         if(cancel.getMessageBox()!= null){
             Logger.logError(cancel.getMessageBox().getText());
-            failCounter++;
         } else {
             Logger.logInfo("Tasks cancelled successfully.");
         }

@@ -13,7 +13,6 @@ import java.util.List;
 
 public class DBItg {
     private final Connection connection;
-
     public Connection getConnection() {return connection;}
 
     public DBItg(String user, String pass, String url) throws ClassNotFoundException, SQLException, InvalidParameterException {
@@ -41,7 +40,7 @@ public class DBItg {
     public static int[] getRunIDs(ResultSet rs) throws SQLException {
         rs.last();
         int size = rs.getRow();
-        int runs[] = new int[size];
+        int[] runs = new int[size];
         rs.beforeFirst();
         int i = 0;
         while(rs.next()){
@@ -58,16 +57,19 @@ public class DBItg {
 
 
     // Function to generate and return query on the go
-    public static String getQuery(int days, String archiveKeyValue, String status, String dbType, int client) throws InvalidParameterException {
-        LocalDate lastday = LocalDate.now().minusDays(days);
+    public static String getQuery(int days, String archiveKeyValue, String status, String dbType, int client, boolean ignore) throws InvalidParameterException {
+        LocalDate lastDay = LocalDate.now().minusDays(days);
+        String ignoreComments = ignore? "" : "AND (acmt.acmt_content IS NULL OR acmt.acmt_content <> 'IGNORE')";
             if(archiveKeyValue.equals("*")) {
                 if(status.equals("BLOCKED"))
                 return "select eh_name, eh_ah_idnr"
                         + "\nfrom eh"
+                        + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                         + "\nwhere eh_status " + getStatusCode(status)
                         + "\nand eh_client = " + client
-                        + "\nand to_char(eh_starttime, 'YYYY-MM-DD') <= '" + lastday
+                        + "\nand to_char(eh_starttime, 'YYYY-MM-DD') <= '" + lastDay
                         + "'\nand eh_otype = 'JOBP'"
+                        + "\n" + ignoreComments
                         + "\norder by"
                         + "\ncase"
                         + "\n    when eh_starttype = '<JSCH>' then '001'"
@@ -77,10 +79,12 @@ public class DBItg {
                         + "\n       end;";
                 else return "select eh_name, eh_ah_idnr"
                         + "\nfrom eh"
+                        + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                         + "\nwhere eh_status " + getStatusCode(status)
                         + "\nand eh_client = " + client
-                        + "\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastday
+                        + "\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
                         + "'\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
+                        + "\n" + ignoreComments
                         + "\norder by"
                         + "\ncase"
                         + "\n    when eh_starttype = '<JSCH>' then '001'"
@@ -94,11 +98,13 @@ public class DBItg {
                 if(status.equals("BLOCKED"))
                     return "select eh_name, eh_ah_idnr"
                             + "\nfrom eh"
+                            + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                             + "\nwhere eh_status " + getStatusCode(status)
                             + "\nand eh_client = " + client
                             + "\nand eh_archive1 = '" + archiveKeyValue
-                            + "'\nand to_char(eh_starttime, 'YYYY-MM-DD') <= '" + lastday
+                            + "'\nand to_char(eh_starttime, 'YYYY-MM-DD') <= '" + lastDay
                             + "'\nand eh_otype = 'JOBP"
+                            + "\n" + ignoreComments
                             + "\norder by"
                             + "\ncase"
                             + "\n    when eh_starttype = '<JSCH>' then '001'"
@@ -109,11 +115,13 @@ public class DBItg {
                 else
                     return "select eh_name, eh_ah_idnr"
                             + "\nfrom eh"
+                            + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                             + "\nwhere eh_status " + getStatusCode(status)
                             + "\nand eh_client = " + client
                             + "\nand eh_archive1 = '" + archiveKeyValue
-                            + "'\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastday
+                            + "'\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
                             + "'\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
+                            + "\n" + ignoreComments
                             + "\norder by"
                             + "\ncase"
                             + "\n    when eh_starttype = '<JSCH>' then '001'"
@@ -126,14 +134,14 @@ public class DBItg {
     }
 
     public static String getStatusCode(String status) throws InvalidParameterException {
-        return switch (status) {
-            case "ENDED_OK" -> "= 1900";
-            case "ANY_OK" -> "between 1900 and 1999";
-            case "ENDED_NOT_OK" -> "= 1800";
-            case "ANY_ABEND" -> "between 1800 and 1899";
-            case "BLOCKED" -> "= 1560";
-            default -> throw new InvalidParameterException("Status type '" + status + "' is not supported/valid");
-        };
+        switch (status) {
+            case "ENDED_OK": return "= 1900";
+            case "ANY_OK" : return "between 1900 and 1999";
+            case "ENDED_NOT_OK": return "= 1800";
+            case "ANY_ABEND": return  "between 1800 and 1899";
+            case "BLOCKED": return "= 1560";
+            default : throw new InvalidParameterException("Status type '" + status + "' is not supported/valid");
+        }
     }
 
 }
