@@ -126,14 +126,14 @@ public class DBItg {
     }
 
     public static String getStatusCode(String status) throws InvalidParameterException {
-        return switch (status) {
-            case "ENDED_OK" -> "= 1900";
-            case "ANY_OK" -> "between 1900 and 1999";
-            case "ENDED_NOT_OK" -> "= 1800";
-            case "ANY_ABEND" -> "between 1800 and 1899";
-            case "BLOCKED" -> "= 1560";
-            default -> throw new InvalidParameterException("Status type '" + status + "' is not supported/valid");
-        };
+        switch (status) {
+            case "ENDED_OK": return "= 1900";
+            case "ANY_OK" : return "between 1900 and 1999";
+            case "ENDED_NOT_OK": return "= 1800";
+            case "ANY_ABEND": return  "between 1800 and 1899";
+            case "BLOCKED": return "= 1560";
+            default : throw new InvalidParameterException("Status type '" + status + "' is not supported/valid");
+        }
     }
 
 }

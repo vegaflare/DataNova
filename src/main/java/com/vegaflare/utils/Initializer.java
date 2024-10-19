@@ -170,9 +170,7 @@ public class Initializer {
             }
         }else{
             printParamDef();
-            for( int i=0; i < args.length; i++)
-                    System.out.println("\n"+args[i]);
-            throw new InvalidParameterException("Invalid number of arguments provided."+ args.length);
+            throw new InvalidParameterException("Invalid number of arguments provided.");
 
 
 
