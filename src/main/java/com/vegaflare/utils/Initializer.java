@@ -31,6 +31,7 @@ public class Initializer {
     private String DBUser;
     private DBItg db;
     private String archiveKey;
+    private Boolean ignoreExcempted = false;
 
     public String getArchiveKey(){return archiveKey;}
 
@@ -83,6 +84,10 @@ public class Initializer {
 
     public String getJDBCUrl() {return JDBCUrl;}
 
+    /**
+     * @return True if all objects with comment 'IGNORE' needs to be considered.
+     */
+    public Boolean getIgnoreExcempted() { return ignoreExcempted;}
 
 
 
@@ -136,7 +141,6 @@ public class Initializer {
 
     protected void resolveParams(String[] args) throws InvalidParameterException {
 
-        validateParams(args);
         for (int i = 0; i < args.length; i += 2) {
             switch (args[i]) {
                 case "-operation": if(Arrays.asList(new String[]{"C","D"}).contains(args[i+1])){
@@ -154,28 +158,15 @@ public class Initializer {
                     break;
                 case "-key" : archiveKey =  args[i+1].equals("%")? "*": args[i+1];
                     break;
+                case "-IGNORE" : ignoreExcempted = true;
+                    break;
+
+                default:    printParamDef();
+                            throw new InvalidParameterException("Invalid arguments provided.");
             }
         }
     }
 
-    // validate the cline params
-    protected void validateParams(String[] args) throws InvalidParameterException {
-        if (args.length == 8 || args.length == 12){
-            String[] available = (args.length == 8) ? new String[]{"-key","-d","-DBUser", "-DBPwd"} : new String[]{"-key","-d","-DBUser", "-DBPwd","-status","-operation"};
-            for (String s : available) {
-                if (!Arrays.asList(args).contains(s)) {
-                    printParamDef();
-                    throw new InvalidParameterException("Invalid arguments provided.");
-                }
-            }
-        }else{
-            printParamDef();
-            throw new InvalidParameterException("Invalid number of arguments provided.");
-
-
-
-        }
-    }
 
     // Prints expected parameters
     private static void printParamDef(){
@@ -186,6 +177,7 @@ public class Initializer {
         System.out.println("   -key <ArchiveKey1 value to look for>");
         System.out.println("   *status: can be 'ENDED_OK'(default), 'ENDED_NOT_OK', 'ANY_OK', 'ANY_ABEND', 'BLOCKED'");
         System.out.println("   *operation: can be 'D' - deactivate(default), 'C' - cancel");
+        System.out.println("   *IGNORE: Ignore all ignore comments");
     }
 
 }
