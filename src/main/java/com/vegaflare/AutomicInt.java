@@ -9,6 +9,8 @@ import com.vegaflare.utils.Logger;
 
 import java.io.IOException;
 
+import static java.lang.System.exit;
+
 public class AutomicInt {
 
     private Connection uc4;
@@ -42,7 +44,7 @@ public class AutomicInt {
             }
         } catch (IOException e) {
             Logger.logError(e.getMessage());
-            isLoginSuccessful = false;
+            exit(15);
         }
 
 
