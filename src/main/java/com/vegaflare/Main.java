@@ -21,7 +21,7 @@ public class Main {
             if (init.getOperation().equals("C")) {init.getAutomicInt().cancelTasks(tasks);}
             init.getAutomicInt().deactivateTasks(tasks);
         }else{
-            Logger.logInfo("Query returned zero results");
+            Logger.logInfo("Query returned zero results, nothing to be done");
         }
         init.close();
     }

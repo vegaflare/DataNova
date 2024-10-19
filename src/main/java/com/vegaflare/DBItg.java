@@ -6,10 +6,6 @@ import com.vegaflare.utils.Logger;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAmount;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static java.lang.System.exit;
 

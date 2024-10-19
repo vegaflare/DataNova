@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact name="DataNova:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/DataNova_jar2</output-path>
+    <root id="root">
+      <element id="archive" name="DataNova.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="DataNova" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="library" level="module" name="Maven: com.uc4:uc4:12.3" module-name="DataNova" />
+        <element id="library" level="project" name="Maven: commons-cli:commons-cli:1.4" />
+        <element id="library" level="module" name="Maven: org.postgresql:postgresql:42.7.3" module-name="DataNova" />
+      </element>
+    </root>
+  </artifact>
+</component>
