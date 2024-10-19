@@ -105,8 +105,8 @@ public class DBItg {
                         + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                         + "\nwhere eh_status " + getStatusCode(status)
                         + "\nand eh_client = " + client
-                        + "\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
-                        + "'\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
+                        + "\nand (eh_endtime IS NULL OR eh_endtime <= '" + lastDay
+                        + "')\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
                         + "\n" + ignoreComments
                         + "\norder by"
                         + "\ncase"
@@ -142,8 +142,8 @@ public class DBItg {
                             + "\nwhere eh_status " + getStatusCode(status)
                             + "\nand eh_client = " + client
                             + "\nand eh_archive1 = '" + archiveKeyValue
-                            + "'\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
-                            + "'\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
+                            + "'\nand (eh_endtime IS NULL OR eh_endtime <= '" + lastDay
+                            + "')\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
                             + "\n" + ignoreComments
                             + "\norder by"
                             + "\ncase"

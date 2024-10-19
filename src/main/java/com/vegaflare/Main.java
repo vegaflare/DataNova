@@ -12,7 +12,6 @@ public class Main {
                 init.getArchiveKey(), init.getStatus(),
                 "doesn't matter yet",
                 init.getUc4Client(), init.getIgnoreExempted());
-
         int[] tasks = DBItg.getRunIDs(init.getDBItg().runStatement(query));
         init.getDBItg().getConnection().close();
 

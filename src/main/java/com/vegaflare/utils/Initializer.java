@@ -139,10 +139,12 @@ public class Initializer {
             }
             if (cmd.hasOption("status")) {
                 this.status = cmd.getOptionValue("status");
-                if (!cmd.hasOption("CANCEL") && status.equals("BLOCKED")) {
-                    throw new ParseException("BLOCKED tasks cannot be deactivated, only cancel is possible. ");
-                } else {
-                    this.operation = "C";
+                if (status.equals("BLOCKED")) {
+                    if(!cmd.hasOption("CANCEL")) {
+                        throw new ParseException("BLOCKED tasks cannot be deactivated, only cancel is possible. ");
+                    } else {
+                        this.operation = "C";
+                    }
                 }
             }
 
