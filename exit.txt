@@ -1,0 +1,11 @@
+
+11 - Parameter error
+12 - Invalid status
+13 - Error when closing DB connection
+14 - Error closing uc4 connection
+15 - Error connectiong to UC4
+16 - Error connecting to DB
+17 - JDBC driver not found
+18 - Error when creating sql statement
+19 - Error while excuting query
+20 - Error opening ini file

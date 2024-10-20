@@ -1,7 +1,5 @@
 package com.vegaflare;
 
-import com.uc4.api.objects.CustomAttribute;
-import com.uc4.api.objects.UC4Object;
 import com.uc4.communication.Connection;
 import com.uc4.communication.ConnectionAttributes;
 import com.uc4.communication.requests.*;
@@ -9,14 +7,12 @@ import com.vegaflare.utils.Logger;
 
 import java.io.IOException;
 
+import static java.lang.System.exit;
+
 public class AutomicInt {
 
     private Connection uc4;
-    private boolean isLoginSuccessful;
 
-    public boolean isLoginSuccessful() {
-        return isLoginSuccessful;
-    }
 
     public void close() throws IOException {
         uc4.close();
@@ -32,8 +28,7 @@ public class AutomicInt {
             String srvName = conAttr.getServerName();
 
             //Test if the login was successful
-            isLoginSuccessful = login.isLoginSuccessful();
-            if (!isLoginSuccessful) {
+            if (!login.isLoginSuccessful()) {
                 Logger.logError(login.getMessageBox().getText());
                 uc4.close();
                 //exit(5);
@@ -42,7 +37,7 @@ public class AutomicInt {
             }
         } catch (IOException e) {
             Logger.logError(e.getMessage());
-            isLoginSuccessful = false;
+            exit(15);
         }
 
 

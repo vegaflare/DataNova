@@ -1,38 +1,55 @@
 package com.vegaflare;
 
-import com.vegaflare.exceptions.InvalidParameterException;
 import com.vegaflare.utils.Logger;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAmount;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import static java.lang.System.exit;
 
 
 public class DBItg {
-    private final Connection connection;
+    private Connection connection;
     public Connection getConnection() {return connection;}
 
-    public DBItg(String user, String pass, String url) throws ClassNotFoundException, SQLException, InvalidParameterException {
-        Class.forName("org.postgresql.Driver");
+    public DBItg(String user, String pass, String url) {
 
-
-        this.connection = DriverManager.getConnection(url, user, pass);
-        if(this.connection.isValid(20)){
-            Logger.logInfo("Connected to DB");
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            Logger.logError(e.getMessage());
+            exit(16);
         }
+
+        try {
+            this.connection = DriverManager.getConnection(url, user, pass);
+            if(this.connection.isValid(20)){
+                Logger.logInfo("Connected to DB");
+            }
+        } catch (SQLException e) {
+            Logger.logError(e.getMessage());
+            exit(17);
+            connection = null; // this will never be reached
+        }
+
     }
 
 
-    public ResultSet runStatement(String query) throws SQLException {
-        Statement statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        //        while (resultSet.next()) {
-//            System.out.println(resultSet.getArray(1)+" : "+ resultSet.getArray(2));
-//        }
-        ResultSet rs = statement.executeQuery(query);
-        connection.close();
+    public ResultSet runStatement(String query) {
+        Statement statement = null;
+        try {
+            statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        } catch (SQLException e) {
+            Logger.logError(e.getMessage());
+            exit(18);
+        }
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery(query);
+        } catch (SQLException e) {
+            Logger.logError(e.getMessage());
+            exit(19);
+        }
         return rs;
     }
 
@@ -48,18 +65,16 @@ public class DBItg {
             ++i;
         }
 
-//        System.out.println("Number of iterations: "+i);
-//        System.out.println("First: "+runs[0]);
-//        System.out.println("Last: "+runs[size-1]);
         return runs;
     }
 
 
 
     // Function to generate and return query on the go
-    public static String getQuery(int days, String archiveKeyValue, String status, String dbType, int client, boolean ignore) throws InvalidParameterException {
+    public static String getQuery(int days, String archiveKeyValue, String status, String dbType, int client, boolean ignore) {
         LocalDate lastDay = LocalDate.now().minusDays(days);
         String ignoreComments = ignore? "" : "AND (acmt.acmt_content IS NULL OR acmt.acmt_content <> 'IGNORE')";
+
             if(archiveKeyValue.equals("*")) {
                 if(status.equals("BLOCKED"))
                 return "select eh_name, eh_ah_idnr"
@@ -82,8 +97,8 @@ public class DBItg {
                         + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                         + "\nwhere eh_status " + getStatusCode(status)
                         + "\nand eh_client = " + client
-                        + "\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
-                        + "'\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
+                        + "\nand (eh_endtime IS NULL OR eh_endtime <= '" + lastDay
+                        + "')\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
                         + "\n" + ignoreComments
                         + "\norder by"
                         + "\ncase"
@@ -119,8 +134,8 @@ public class DBItg {
                             + "\nwhere eh_status " + getStatusCode(status)
                             + "\nand eh_client = " + client
                             + "\nand eh_archive1 = '" + archiveKeyValue
-                            + "'\nand to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
-                            + "'\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
+                            + "'\nand (eh_endtime IS NULL OR eh_endtime <= '" + lastDay
+                            + "')\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
                             + "\n" + ignoreComments
                             + "\norder by"
                             + "\ncase"
@@ -133,14 +148,16 @@ public class DBItg {
             }
     }
 
-    public static String getStatusCode(String status) throws InvalidParameterException {
+
+    public static String getStatusCode(String status)  {
         switch (status) {
             case "ENDED_OK": return "= 1900";
             case "ANY_OK" : return "between 1900 and 1999";
             case "ENDED_NOT_OK": return "= 1800";
             case "ANY_ABEND": return  "between 1800 and 1899";
             case "BLOCKED": return "= 1560";
-            default : throw new InvalidParameterException("Status type '" + status + "' is not supported/valid");
+            default : Logger.logError( "Status type '" + status + "' is not supported/valid"); exit(12);
+            return ""; // this line will never be reached
         }
     }
 
