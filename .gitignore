@@ -40,3 +40,4 @@ build/
 ### IGNORE ###
 config-properties.ini
 *.jar
+out/

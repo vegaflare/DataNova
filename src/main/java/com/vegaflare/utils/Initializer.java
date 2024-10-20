@@ -105,7 +105,7 @@ public class Initializer {
         HelpFormatter helpFormatter = new HelpFormatter();
 
         //Parse the options from commandline inputs
-        CommandLine cmd = null;
+        CommandLine cmd;
         try {
             cmd = parser.parse(options, args);
 
@@ -196,7 +196,7 @@ public class Initializer {
                 .longOpt("host")
                 .desc("Hostname or IP of the AE server")
                 .hasArg(true)
-                .argName("servername")
+                .argName("HOSTNAME")
                 .required(true)
                 .build();
         Option port = Option.builder("p")

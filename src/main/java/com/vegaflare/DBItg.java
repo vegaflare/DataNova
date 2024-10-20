@@ -1,7 +1,5 @@
 package com.vegaflare;
 
-import com.sun.org.slf4j.internal.LoggerFactory;
-import com.vegaflare.exceptions.InvalidParameterException;
 import com.vegaflare.utils.Logger;
 
 import java.sql.*;
@@ -45,9 +43,6 @@ public class DBItg {
             Logger.logError(e.getMessage());
             exit(18);
         }
-        //        while (resultSet.next()) {
-//            System.out.println(resultSet.getArray(1)+" : "+ resultSet.getArray(2));
-//        }
         ResultSet rs = null;
         try {
             rs = statement.executeQuery(query);
@@ -70,16 +65,13 @@ public class DBItg {
             ++i;
         }
 
-//        System.out.println("Number of iterations: "+i);
-//        System.out.println("First: "+runs[0]);
-//        System.out.println("Last: "+runs[size-1]);
         return runs;
     }
 
 
 
     // Function to generate and return query on the go
-    public static String getQuery(int days, String archiveKeyValue, String status, String dbType, int client, boolean ignore) throws InvalidParameterException {
+    public static String getQuery(int days, String archiveKeyValue, String status, String dbType, int client, boolean ignore) {
         LocalDate lastDay = LocalDate.now().minusDays(days);
         String ignoreComments = ignore? "" : "AND (acmt.acmt_content IS NULL OR acmt.acmt_content <> 'IGNORE')";
 
