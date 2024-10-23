@@ -1,1 +1,1 @@
-Extract the contents and add uc4.jar & postgres jdbc driver in the lib folder
+Extract the contents and add uc4.jar & postgres/oracle jdbc driver in the lib folder

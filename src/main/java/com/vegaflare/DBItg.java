@@ -15,7 +15,11 @@ public class DBItg {
     public DBItg(String user, String pass, String url) {
 
         try {
-            Class.forName("org.postgresql.Driver");
+            if (url.startsWith("jdbc:oracle")){
+                Class.forName("oracle.jdbc.driver.OracleDriver");
+            }else {
+                Class.forName("org.postgresql.Driver");
+            }
         } catch (ClassNotFoundException e) {
             Logger.logError(e.getMessage());
             exit(16);
@@ -79,7 +83,7 @@ public class DBItg {
                 if(status.equals("BLOCKED"))
                 return "select eh_name, eh_ah_idnr"
                         + "\nfrom eh"
-                        + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
+                        + "\nLEFT OUTER JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                         + "\nwhere eh_status " + getStatusCode(status)
                         + "\nand eh_client = " + client
                         + "\nand to_char(eh_starttime, 'YYYY-MM-DD') <= '" + lastDay
@@ -91,13 +95,13 @@ public class DBItg {
                         + "\n    when eh_starttype = '<ONCE>' then '002'"
                         + "\n    when eh_starttype is null then '003'"
                         + "\n    else eh_starttype"
-                        + "\n       end;";
+                        + "\n       end";
                 else return "select eh_name, eh_ah_idnr"
                         + "\nfrom eh"
-                        + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
+                        + "\nLEFT OUTER JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                         + "\nwhere eh_status " + getStatusCode(status)
                         + "\nand eh_client = " + client
-                        + "\nand (eh_endtime IS NULL OR eh_endtime <= '" + lastDay
+                        + "\nand (eh_endtime IS NULL OR to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
                         + "')\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
                         + "\n" + ignoreComments
                         + "\norder by"
@@ -106,19 +110,19 @@ public class DBItg {
                         + "\n    when eh_starttype = '<ONCE>' then '002'"
                         + "\n    when eh_starttype is null then '003'"
                         + "\n    else eh_starttype"
-                        + "\n       end;";
+                        + "\n       end";
             }
 
             else {
                 if(status.equals("BLOCKED"))
                     return "select eh_name, eh_ah_idnr"
                             + "\nfrom eh"
-                            + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
+                            + "\nLEFT OUTER JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                             + "\nwhere eh_status " + getStatusCode(status)
                             + "\nand eh_client = " + client
                             + "\nand eh_archive1 = '" + archiveKeyValue
                             + "'\nand to_char(eh_starttime, 'YYYY-MM-DD') <= '" + lastDay
-                            + "'\nand eh_otype = 'JOBP"
+                            + "'\nand eh_otype = 'JOBP'"
                             + "\n" + ignoreComments
                             + "\norder by"
                             + "\ncase"
@@ -126,15 +130,15 @@ public class DBItg {
                             + "\n    when eh_starttype = '<ONCE>' then '002'"
                             + "\n    when eh_starttype is null then '003'"
                             + "\n    else eh_starttype"
-                            + "\n       end;";
+                            + "\n       end";
                 else
                     return "select eh_name, eh_ah_idnr"
                             + "\nfrom eh"
-                            + "\nLEFT JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
+                            + "\nLEFT OUTER JOIN acmt ON eh.eh_ah_idnr = acmt.acmt_ah_idnr"
                             + "\nwhere eh_status " + getStatusCode(status)
                             + "\nand eh_client = " + client
                             + "\nand eh_archive1 = '" + archiveKeyValue
-                            + "'\nand (eh_endtime IS NULL OR eh_endtime <= '" + lastDay
+                            + "'\nand (eh_endtime IS NULL OR to_char(eh_endtime, 'YYYY-MM-DD') <= '" + lastDay
                             + "')\nand eh_otype in ('JOBS','JOBP','JOBF','SCRI')"
                             + "\n" + ignoreComments
                             + "\norder by"
@@ -143,7 +147,7 @@ public class DBItg {
                             + "\n    when eh_starttype = '<ONCE>' then '002'"
                             + "\n    when eh_starttype is null then '003'"
                             + "\n    else eh_starttype"
-                            + "\n       end;";
+                            + "\n       end";
 
             }
     }

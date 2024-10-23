@@ -12,6 +12,7 @@
         <element id="library" level="module" name="Maven: com.uc4:uc4:12.3" module-name="DataNova" />
         <element id="library" level="project" name="Maven: commons-cli:commons-cli:1.4" />
         <element id="library" level="module" name="Maven: org.postgresql:postgresql:42.7.3" module-name="DataNova" />
+        <element id="library" level="module" name="Maven: org.oracle:ojdbc8:12" module-name="DataNova" />
       </element>
     </root>
   </artifact>
