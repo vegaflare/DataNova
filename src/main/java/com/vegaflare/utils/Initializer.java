@@ -149,7 +149,9 @@ public class Initializer {
             }
 
             if (cmd.hasOption("CANCEL")) {
-                throw new ParseException("Only blocked tasks can be canceled, please try again without 'CANCEL' for deactivation.");
+                if(!this.operation.equals("C")) {
+                    throw new ParseException("Only blocked tasks can be canceled, please try again without 'CANCEL' for deactivation.");
+                }
             }
             if(cmd.hasOption("IGNORE")){
                 this.ignoreExempted = true;
